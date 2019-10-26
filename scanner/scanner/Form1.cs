@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -28,6 +28,7 @@ namespace scanner
 
     public partial class Form1 : Form
     {
+        int error_checking = 0;
         string line;
         string[] reserved = { "if", "then", "else", "end", "repeat", "until", "write", "read" };
         
@@ -119,86 +120,99 @@ namespace scanner
                 // separate each word in each line to compare it with the reserved word
                 
                 string[] each_ling = a.Split(sperator2, StringSplitOptions.RemoveEmptyEntries);
-                
-                  
-                
 
-                foreach (string s in each_ling)
+
+
+                if (error_checking == 0)
                 {
-                    if (s[0] == '{')
+                    foreach (string s in each_ling)
                     {
-                        break;
-                    }
 
-                    if (Is_Reserved(s) != -1)
-                    {
-                        token_table.Rows.Add(s, reserved[Is_Reserved(s)].ToUpper());
-                        //token_table.Rows.Add(s, "Reserved");
-                        //and make the if(Is_Reserved(s)) only and modify the function to return bool
-                    }
-                    else if (symbols(s) != "other")
-                    {
-                        token_table.Rows.Add(s, symbols(s));
-                    }
-                    else if (s[0] != '{')
-                    {
-                        if (Char.IsDigit(s[0]))
+                        if (s[0] == '{')
                         {
-                            Boolean sign = true;
-                            for (int i = 0; i < s.Length; i++)
+                            break;
+                        }
+
+                        if (Is_Reserved(s) != -1)
+                        {
+                            token_table.Rows.Add(s, reserved[Is_Reserved(s)].ToUpper());
+                            //token_table.Rows.Add(s, "Reserved");
+                            //and make the if(Is_Reserved(s)) only and modify the function to return bool
+                        }
+                        else if (symbols(s) != "other")
+                        {
+                            token_table.Rows.Add(s, symbols(s));
+                        }
+                        else if (s[0] != '{')
+                        {
+                            if (Char.IsDigit(s[0]))
                             {
-                                if (!Char.IsDigit(s[i]))
+                                Boolean sign = true;
+                                for (int i = 0; i < s.Length; i++)
                                 {
-                                    /*
-                                    if(s[i] == '\r')
+                                    if (!Char.IsDigit(s[i]))
                                     {
-                                        continue;
+                                        /*
+                                        if(s[i] == '\r')
+                                        {
+                                            continue;
+                                        }
+                                        */
+                                        sign = false;
                                     }
-                                    */
-                                    sign = false;
+                                }
+                                if (sign == true)
+                                {
+                                    token_table.Rows.Add(s, "Number");
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Undefined Number", "Error");
+                                    error_checking = 1;
+                                    break;
                                 }
                             }
-                            if (sign == true)
+                            else if ((s[0] >= 'a' && s[0] <= 'z') || (s[0] >= 'A' && s[0] <= 'Z'))
                             {
-                                token_table.Rows.Add(s, "Number");
+
+                                Boolean sign = true;
+                                for (int i = 0; i < s.Length; i++)
+                                {
+                                    if (!Char.IsLetter(s[i]))
+                                    {
+                                        /*
+                                        if (s[i] == '\r')
+                                        {
+                                            continue;
+                                        }
+                                        */
+                                        sign = false;
+                                    }
+                                }
+                                if (sign == true)
+                                {
+                                    token_table.Rows.Add(s, "Identifier");
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Undefined Letter", "Error");
+                                    error_checking = 1;
+                                    break;
+                                }
                             }
                             else
                             {
-                                MessageBox.Show("Undefined Number", "Error");
+                                MessageBox.Show("Undefined token", "Error");
+                                error_checking = 1;
+                                break;
                             }
                         }
-                        else if ((s[0] >= 'a' && s[0] <= 'z') || (s[0] >= 'A' && s[0] <= 'Z'))
-                        {
 
-                            Boolean sign = true;
-                            for (int i = 0; i < s.Length; i++)
-                            {
-                                if (!Char.IsLetter(s[i]))
-                                {
-                                    /*
-                                    if (s[i] == '\r')
-                                    {
-                                        continue;
-                                    }
-                                    */
-                                    sign = false;
-                                }
-                            }
-                            if (sign == true)
-                            {
-                                token_table.Rows.Add(s, "Identifier");
-                            }
-                            else
-                            {
-                                MessageBox.Show("Undefined Letter", "Error");
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("Undefined token", "Error");
-                        }
                     }
-
+                }
+                else
+                {
+                    break;
                 }
             }
 
