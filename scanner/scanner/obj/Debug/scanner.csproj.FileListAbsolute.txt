@@ -1,0 +1,20 @@
+C:\Users\pc\source\repos\scanner\scanner\bin\Debug\scanner.exe.config
+C:\Users\pc\source\repos\scanner\scanner\bin\Debug\scanner.exe
+C:\Users\pc\source\repos\scanner\scanner\bin\Debug\scanner.pdb
+C:\Users\pc\source\repos\scanner\scanner\obj\Debug\scanner.csprojAssemblyReference.cache
+C:\Users\pc\source\repos\scanner\scanner\obj\Debug\scanner.Form1.resources
+C:\Users\pc\source\repos\scanner\scanner\obj\Debug\scanner.Properties.Resources.resources
+C:\Users\pc\source\repos\scanner\scanner\obj\Debug\scanner.csproj.GenerateResource.cache
+C:\Users\pc\source\repos\scanner\scanner\obj\Debug\scanner.csproj.CoreCompileInputs.cache
+C:\Users\pc\source\repos\scanner\scanner\obj\Debug\scanner.exe
+C:\Users\pc\source\repos\scanner\scanner\obj\Debug\scanner.pdb
+D:\Nada\4th Elec\First Term\Compilers\Projects\Project 1 Scanner\scanner\scanner\bin\Debug\scanner.exe.config
+D:\Nada\4th Elec\First Term\Compilers\Projects\Project 1 Scanner\scanner\scanner\bin\Debug\scanner.exe
+D:\Nada\4th Elec\First Term\Compilers\Projects\Project 1 Scanner\scanner\scanner\bin\Debug\scanner.pdb
+D:\Nada\4th Elec\First Term\Compilers\Projects\Project 1 Scanner\scanner\scanner\obj\Debug\scanner.csprojAssemblyReference.cache
+D:\Nada\4th Elec\First Term\Compilers\Projects\Project 1 Scanner\scanner\scanner\obj\Debug\scanner.Form1.resources
+D:\Nada\4th Elec\First Term\Compilers\Projects\Project 1 Scanner\scanner\scanner\obj\Debug\scanner.Properties.Resources.resources
+D:\Nada\4th Elec\First Term\Compilers\Projects\Project 1 Scanner\scanner\scanner\obj\Debug\scanner.csproj.GenerateResource.cache
+D:\Nada\4th Elec\First Term\Compilers\Projects\Project 1 Scanner\scanner\scanner\obj\Debug\scanner.csproj.CoreCompileInputs.cache
+D:\Nada\4th Elec\First Term\Compilers\Projects\Project 1 Scanner\scanner\scanner\obj\Debug\scanner.exe
+D:\Nada\4th Elec\First Term\Compilers\Projects\Project 1 Scanner\scanner\scanner\obj\Debug\scanner.pdb
