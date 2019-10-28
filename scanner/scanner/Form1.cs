@@ -15,12 +15,6 @@ enum token_type
     number
 };
 
-struct token
-{
-    token_type type;
-    int index;
-    string value;
-};
 
 
 namespace scanner
@@ -31,7 +25,7 @@ namespace scanner
         int error_checking = 0;
         string line;
         string[] reserved = { "if", "then", "else", "end", "repeat", "until", "write", "read" };
-        
+
         // Data grid view
         public static Panel panels = new Panel();
         DataTable token_table = new DataTable();
@@ -45,32 +39,38 @@ namespace scanner
         private void Form1_Load(object sender, EventArgs e)
         {
             // data grid view
-            token_table.Columns.Add("Token Type", typeof(string));
             token_table.Columns.Add("Token Value", typeof(string));
-            dataGridView1.DataSource = token_table;
+            token_table.Columns.Add("Token Type", typeof(string)) ;
+            dataGridView1.DataSource =  token_table;
 
         }
-        string symbols(string word)
+        string symbols(char word)
         {
 
             switch (word)
             {
-                case "+":
+                case '+':
                     return "puls";
-                case "-":
-                    return "mins";
-                case "*":
+                case '-':
+                    return "minus";
+                case '*':
                     return "multi";
-                case "/":
+                case '/':
                     return "div";
-                case ":=":
-                    return "Assignment";
-                case "<":
+                case '<':
                     return "LessThan";
-                case ">":
+                case '>':
                     return "GreaterThan";
-                case "=":
+                case '=':
                     return "Equal";
+                case '[':
+                    return "Left bracket";
+                case ']':
+                    return "Right bracket";
+                case '(':
+                    return "Left Parentheses";
+                case ')':
+                    return "Right Parenthese";
                 default:
                     return "other";
             }
@@ -94,6 +94,97 @@ namespace scanner
 
         }
 
+        void check(string line)
+        {
+            char[] sperator2 = { ' ', '}' };
+            string[] new_line = line.Split(sperator2, StringSplitOptions.RemoveEmptyEntries);
+            string num = "", word = "";
+
+            if (error_checking == 0)
+            {
+                foreach (string s in new_line)
+                {
+                    num = ""; word = "";
+
+                    if (s[0] == '{')
+                        break;
+
+                    if (Is_Reserved(s) != -1)
+                    {
+                        token_table.Rows.Add(s, reserved[Is_Reserved(s)].ToUpper() + "   Reserved");
+                        continue;
+                    }
+
+                    for (int i = 0; i < s.Length; i++)
+                    {
+
+                        if ((s[i] == ':') && (s[i + 1] == '='))
+                        {
+                            if (num != "")
+                            {
+                                token_table.Rows.Add(num, "Number");
+                                num = "";
+                            }
+                            else if (word != "")
+                            {
+                                token_table.Rows.Add(word, "Identifier");
+                                word = "";
+                            }
+                            token_table.Rows.Add(":=", "Assignment");
+                            i++;
+                        }
+                        else if ((s[i] == ';'))
+                        {
+                            if (num != "")
+                            {
+                                token_table.Rows.Add(num, "Number");
+                                num = "";
+                            }
+                            else if (word != "")
+                            {
+                                token_table.Rows.Add(word, "Identifier");
+                                word = "";
+                            }
+                            token_table.Rows.Add(";", "Separator");
+                        }
+                        else if (symbols(s[i]) != "other")
+                        {
+                            if (num != "")
+                            {
+                                token_table.Rows.Add(num, "Number");
+                                num = "";
+                            }
+                            else if (word != "")
+                            {
+                                token_table.Rows.Add(word, "Identifier");
+                                word = "";
+                            }
+
+                            token_table.Rows.Add(s[i], symbols(s[i]));
+                        }
+                        else if (Char.IsDigit(s[i]))
+                            num += s[i];
+
+                        else if (Char.IsLetter(s[i]))
+                            word += s[i];
+
+                        if (num != "" && word != "")
+                        {
+                            MessageBox.Show("Undefined", "Error");
+                            error_checking = 1;
+                            return;
+                        }
+                    }
+
+                    if (num != "")
+                        token_table.Rows.Add(num, "Number");
+                    else if (word != "")
+                        token_table.Rows.Add(word, "Identifier");
+
+                }
+            }
+
+        }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
@@ -103,7 +194,7 @@ namespace scanner
         private void button1_Click(object sender, EventArgs e)
         {
             char[] sperator = { '\n' };
-            char[] sperator2 = { ' ', ';', '}' };
+            char[] sperator2 = { ' ', '}' };
             line = textBox1.Text;
 
             // separate each line of the code in a certain index in a string array
@@ -117,109 +208,13 @@ namespace scanner
 
             foreach (string a in new_line)
             {
-                // separate each word in each line to compare it with the reserved word
-                
-                string[] each_ling = a.Split(sperator2, StringSplitOptions.RemoveEmptyEntries);
-
-
-
-                if (error_checking == 0)
-                {
-                    foreach (string s in each_ling)
-                    {
-
-                        if (s[0] == '{')
-                        {
-                            break;
-                        }
-
-                        if (Is_Reserved(s) != -1)
-                        {
-                            token_table.Rows.Add(s, reserved[Is_Reserved(s)].ToUpper());
-                            //token_table.Rows.Add(s, "Reserved");
-                            //and make the if(Is_Reserved(s)) only and modify the function to return bool
-                        }
-                        else if (symbols(s) != "other")
-                        {
-                            token_table.Rows.Add(s, symbols(s));
-                        }
-                        else if (s[0] != '{')
-                        {
-                            if (Char.IsDigit(s[0]))
-                            {
-                                Boolean sign = true;
-                                for (int i = 0; i < s.Length; i++)
-                                {
-                                    if (!Char.IsDigit(s[i]))
-                                    {
-                                        /*
-                                        if(s[i] == '\r')
-                                        {
-                                            continue;
-                                        }
-                                        */
-                                        sign = false;
-                                    }
-                                }
-                                if (sign == true)
-                                {
-                                    token_table.Rows.Add(s, "Number");
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Undefined Number", "Error");
-                                    error_checking = 1;
-                                    break;
-                                }
-                            }
-                            else if ((s[0] >= 'a' && s[0] <= 'z') || (s[0] >= 'A' && s[0] <= 'Z'))
-                            {
-
-                                Boolean sign = true;
-                                for (int i = 0; i < s.Length; i++)
-                                {
-                                    if (!Char.IsLetter(s[i]))
-                                    {
-                                        /*
-                                        if (s[i] == '\r')
-                                        {
-                                            continue;
-                                        }
-                                        */
-                                        sign = false;
-                                    }
-                                }
-                                if (sign == true)
-                                {
-                                    token_table.Rows.Add(s, "Identifier");
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Undefined Letter", "Error");
-                                    error_checking = 1;
-                                    break;
-                                }
-                            }
-                            else
-                            {
-                                MessageBox.Show("Undefined token", "Error");
-                                error_checking = 1;
-                                break;
-                            }
-                        }
-
-                    }
-                }
-                else
-                {
-                    break;
-                }
+                check(a);
             }
-
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            error_checking = 0;
             token_table.Rows.Clear();
             textBox1.Clear();
         }
