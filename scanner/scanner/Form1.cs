@@ -170,8 +170,18 @@ namespace scanner
 
                         if (num != "" && word != "")
                         {
-                            MessageBox.Show("Undefined", "Error");
-                            error_checking = 1;
+                            var result = MessageBox.Show("Undefined Token..Do you want to edit the code", "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                            
+                            switch (result)
+                            {
+                                case DialogResult.Yes:   // Yes button pressed
+                                    error_checking = 0;
+                                    token_table.Rows.Clear();
+                                    break;
+                                case DialogResult.No:    // No button pressed
+                                    error_checking = 1;
+                                    break;
+                            }
                             return;
                         }
                     }
@@ -217,6 +227,12 @@ namespace scanner
             error_checking = 0;
             token_table.Rows.Clear();
             textBox1.Clear();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            error_checking = 0;
+            token_table.Rows.Clear();
         }
     }
 
